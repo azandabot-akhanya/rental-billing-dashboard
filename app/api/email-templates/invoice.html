@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+        .invoice-details {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4F46E5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .invoice-details table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-details td {
+            padding: 8px 0;
+            font-size: 15px;
+        }
+        .invoice-details td:first-child {
+            font-weight: 600;
+            color: #666;
+            width: 40%;
+        }
+        .invoice-details td:last-child {
+            color: #1a1a1a;
+        }
+        .amount-due {
+            background-color: #f0fdf4;
+            border: 2px solid #22c55e;
+            padding: 20px;
+            text-align: center;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .amount-due .label {
+            font-size: 14px;
+            color: #166534;
+            margin-bottom: 5px;
+        }
+        .amount-due .amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: #15803d;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4F46E5;
+            color: white !important;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #4338CA;
+        }
+        .button-secondary {
+            display: inline-block;
+            background-color: #e5e7eb;
+            color: #374151 !important;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .info-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .info-box p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #1e40af;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+        .attachment-notice {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #78350f;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 25px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Invoice from {COMPANY_NAME}</h1>
+            <p>Your invoice is ready</p>
+        </div>
+
+        <div class="content">
+            <p class="greeting">Dear {TENANT_NAME},</p>
+
+            <p>We hope this message finds you well. Please find your invoice details below:</p>
+
+            <div class="invoice-details">
+                <table>
+                    <tr>
+                        <td>Invoice Number:</td>
+                        <td><strong>{INVOICE_NUMBER}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Invoice Date:</td>
+                        <td>{INVOICE_DATE}</td>
+                    </tr>
+                    <tr>
+                        <td>Due Date:</td>
+                        <td><strong>{DUE_DATE}</strong></td>
+                    </tr>
+                    <tr>
+                        <td>Property:</td>
+                        <td>{PROPERTY_NAME} - Unit {UNIT_NUMBER}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="amount-due">
+                <div class="label">TOTAL AMOUNT DUE</div>
+                <div class="amount">R {TOTAL_AMOUNT}</div>
+            </div>
+
+            <div class="attachment-notice">
+                <strong>📎 Attachment:</strong> Your detailed invoice is attached as a PDF document to this email.
+            </div>
+
+            <div class="button-container">
+                <a href="{PAYMENT_LINK}" class="button">Make Payment</a>
+                <a href="{VIEW_INVOICE_LINK}" class="button-secondary">View Invoice</a>
+            </div>
+
+            <div class="info-box">
+                <p><strong>Payment Instructions:</strong></p>
+                <p>Please use your invoice number <strong>{INVOICE_NUMBER}</strong> as the payment reference.</p>
+                <p>Banking details are included in the attached PDF invoice.</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <p style="font-size: 14px; color: #6b7280;">
+                If you have any questions or concerns about this invoice, please don't hesitate to contact us.
+            </p>
+
+            <p style="font-size: 14px; color: #6b7280;">
+                Thank you for your business!
+            </p>
+
+            <p style="margin-top: 30px; font-size: 14px; color: #6b7280;">
+                Best regards,<br>
+                <strong>{COMPANY_NAME}</strong>
+            </p>
+        </div>
+
+        <div class="footer">
+            <p><strong>{COMPANY_NAME}</strong></p>
+            <p>This is an automated message. Please do not reply to this email.</p>
+            <p style="margin-top: 15px; font-size: 12px;">
+                © 2025 {COMPANY_NAME}. All rights reserved.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

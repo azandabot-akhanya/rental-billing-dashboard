@@ -1,0 +1,73 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/vendor
+/app/api/vendor
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# logs
+*.log
+api.log
+next.log
+php.log
+
+# env files (SECURITY: Never commit environment variables)
+.env*
+!.env.example
+
+# database credentials (SECURITY: config.php contains credentials)
+app/api/config.php
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# PHP
+composer.phar
+composer.lock
+
+# Build artifacts
+out.zip
+
+# Storage / Uploads
+storage/
+uploads/
+/public/uploads
+
+# Testing
+coverage/
+.phpunit.result.cache
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+.cache/

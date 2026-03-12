@@ -1,0 +1,232 @@
+# ThynkxPro Production .htaccess Configuration
+# Upload this file to /public_html/.htaccess on your server
+
+# Enable Rewrite Engine
+RewriteEngine On
+RewriteBase /
+
+# ============================================
+# CORS Configuration for API
+# ============================================
+<IfModule mod_headers.c>
+    # Allow requests from any origin (adjust in production if needed)
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+    Header set Access-Control-Max-Age "3600"
+</IfModule>
+
+# Handle preflight OPTIONS requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# ============================================
+# Fix for Static Export - Redirect all routes to .html files
+# ============================================
+
+# Redirect clean URLs to .html files (e.g., /dashboard -> /dashboard.html)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/_next/
+RewriteCond %{REQUEST_URI} !\.(html|css|js|json|xml|txt|jpg|jpeg|png|gif|svg|woff|woff2|ttf|ico)$
+RewriteRule ^(.*)$ /$1.html [L]
+
+# Fallback to index.html for root and missing pages
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} !^/_next/
+RewriteRule ^$ /index.html [L]
+
+# ============================================
+# API Routing Rules
+# ============================================
+
+# Companies API
+RewriteRule ^api/companies/?$ api/CompanyController.php [L,QSA]
+
+# Tenants API
+RewriteRule ^api/tenants/?$ api/TenantController.php [L,QSA]
+
+# Properties API
+RewriteRule ^api/properties/?$ api/PropertyController.php [L,QSA]
+
+# Invoices API
+RewriteRule ^api/invoices/?$ api/InvoiceController.php [L,QSA]
+
+# Dashboard API
+RewriteRule ^api/dashboard/?$ api/DashboardController.php [L,QSA]
+
+# Deposits API
+RewriteRule ^api/deposits/?$ api/DepositController.php [L,QSA]
+
+# Expenses API
+RewriteRule ^api/expenses/?$ api/ExpenseController.php [L,QSA]
+
+# Documents API
+RewriteRule ^api/documents/?$ api/DocumentController.php [L,QSA]
+
+# Calendar API
+RewriteRule ^api/calendar/?$ api/CalendarController.php [L,QSA]
+
+# Stock API
+RewriteRule ^api/stock/?$ api/StockController.php [L,QSA]
+
+# Suppliers API
+RewriteRule ^api/suppliers/?$ api/SupplierController.php [L,QSA]
+
+# Utilities API
+RewriteRule ^api/utilities/?$ api/UtilityController.php [L,QSA]
+
+# Leases API
+RewriteRule ^api/leases/?$ api/LeaseController.php [L,QSA]
+
+# Transactions API
+RewriteRule ^api/transactions/?$ api/TransactionController.php [L,QSA]
+
+# Users/Auth API
+RewriteRule ^api/users/?$ api/UserController.php [L,QSA]
+
+# ============================================
+# Security Headers
+# ============================================
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # XSS Protection
+    Header set X-XSS-Protection "1; mode=block"
+
+    # Prevent MIME type sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Referrer Policy
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ============================================
+# File Protection
+# ============================================
+
+# Protect sensitive files
+<FilesMatch "\.(env|sql|md|git|gitignore|htaccess|htpasswd)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Protect configuration files
+<Files "package.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "next.config.ts">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files "tsconfig.json">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# ============================================
+# PHP Configuration
+# ============================================
+<IfModule mod_php.c>
+    # Increase upload limits
+    php_value upload_max_filesize 50M
+    php_value post_max_size 50M
+    php_value max_execution_time 300
+    php_value max_input_time 300
+
+    # Error reporting (disable in production)
+    php_flag display_errors Off
+    php_flag log_errors On
+
+    # Session configuration
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+</IfModule>
+
+# ============================================
+# Compression (Performance)
+# ============================================
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, JSON, XML
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+    AddOutputFilterByType DEFLATE application/xml application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml application/atom_xml
+    AddOutputFilterByType DEFLATE text/javascript application/javascript application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ============================================
+# Browser Caching
+# ============================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+
+    # PDF files
+    ExpiresByType application/pdf "access plus 1 month"
+
+    # Default
+    ExpiresDefault "access plus 1 week"
+</IfModule>
+
+# ============================================
+# Error Pages (Optional)
+# ============================================
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
+# ============================================
+# Force HTTPS (Uncomment when SSL is setup)
+# ============================================
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ============================================
+# Deny Access to Hidden Files
+# ============================================
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# ============================================
+# Directory Index
+# ============================================
+DirectoryIndex index.html index.php
+
+# Disable directory browsing
+Options -Indexes
+
+# ============================================
+# Node.js Reverse Proxy (If using Node.js)
+# ============================================
+# Uncomment if running Next.js on Node.js (e.g., port 3000)
+# RewriteCond %{REQUEST_URI} !^/api/
+# RewriteCond %{REQUEST_URI} !^/uploads/
+# RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]

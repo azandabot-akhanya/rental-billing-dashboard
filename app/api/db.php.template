@@ -1,0 +1,32 @@
+<?php
+/**
+ * Database Configuration for Production
+ *
+ * INSTRUCTIONS:
+ * 1. Rename this file to db.php
+ * 2. Update the database credentials below
+ * 3. Upload to /api/db.php on your server
+ */
+
+// Database configuration
+$host = 'localhost';  // Usually 'localhost' for shared hosting
+$dbname = 'thynkxv8r6h8_thynkxpro';  // Your database name
+$username = 'YOUR_DB_USERNAME_HERE';  // ⚠️ CHANGE THIS
+$password = 'YOUR_DB_PASSWORD_HERE';  // ⚠️ CHANGE THIS
+
+try {
+    $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch(PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Database connection failed',
+        'error' => 'Could not connect to database'
+    ]);
+    error_log("Database connection error: " . $e->getMessage());
+    exit;
+}
+?>
